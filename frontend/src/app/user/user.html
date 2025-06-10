@@ -1,1 +1,61 @@
-<p>user works!</p>
+<div class="user">
+  <div class="profile-info">
+    <img [src]="user?.profilePic || 'assets/default_profile.png'"
+         [alt]="'Profile picture of ' + (user?.username || 'user')"
+         class="profile-pic">
+    <h2>{{ user?.username || 'Anonymous User' }}</h2>
+  </div>
+
+  <div class="user-videos">
+    <h3>My Videos</h3>
+    <div class="videos">
+      <div class="video-thumbnail" *ngFor="let video of userVideos" (click)="navigateToVideo(video.id)">
+        <img [src]="video.thumbnail || 'assets/default_thumbnail.png'"
+             [alt]="'Thumbnail for ' + video.title"
+             class="thumbnail-img">
+        <p class="video-title">{{ video.title }}</p>
+      </div>
+      <p *ngIf="userVideos?.length === 0" class="no-videos">No videos uploaded yet.</p>
+    </div>
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  </div>
+
+  <div class="user-settings">
+    <h3>Settings</h3>
+    <form>
+      <label for="language-select">
+        Language:
+        <select id="language-select"
+                [(ngModel)]="settings.language"
+                name="language"
+                (ngModelChange)="updateLanguage($event)"
+                aria-label="Select preferred language">
+          <option value="en">English</option>
+          <option value="de">Deutsch</option>
+        </select>
+      </label>
+
+      <div class="appearance">
+        Appearance:
+        <label>
+          <input type="radio"
+                 name="theme"
+                 value="light"
+                 [(ngModel)]="settings.theme"
+                 (ngModelChange)="updateTheme($event)"
+                 aria-label="Light theme" />
+          Light
+        </label>
+        <label>
+          <input type="radio"
+                 name="theme"
+                 value="dark"
+                 [(ngModel)]="settings.theme"
+                 (ngModelChange)="updateTheme($event)"
+                 aria-label="Dark theme" />
+          Dark
+        </label>
+      </div>
+    </form>
+  </div>
+</div>

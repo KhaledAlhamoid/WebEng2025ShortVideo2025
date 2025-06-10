@@ -1,1 +1,46 @@
-<p>feed works!</p>
+<div class="feed">
+  <div class="video-player" *ngIf="currentVideo; else loading">
+    <!-- Video Element -->
+    <video controls [src]="currentVideo.src" autoplay loop class="video"></video>
+
+    <div class="video-overlay">
+      <div class="interaction-section">
+        <div class="vote-section">
+          <!-- Up/Down Vote Buttons & Score -->
+          <button (click)="vote(true)" [disabled]="hasVotedUp" aria-label="Upvote Video">⬆ Upvote ({{ currentVideo.score }})</button>
+          <button (click)="vote(false)" [disabled]="hasVotedDown" aria-label="Downvote Video">⬇ Downvote</button>
+        </div>
+
+        <div class="comment-section">
+          <!-- Comments Button & List -->
+          <button (click)="toggleComments()" [attr.aria-expanded]="showComments" aria-controls="commentsList">
+            {{ showComments ? 'Hide' : 'Show' }} Comments ({{ currentVideo.comments.length || 0 }})
+          </button>
+          <div *ngIf="showComments" class="comments-list" id="commentsList">
+            <div *ngFor="let comment of currentVideo.comments || []" class="comment">
+              <img [src]="comment.profilePic" alt="Profile picture of {{ comment.username }}" class="comment-pic">
+              <div class="comment-content">
+                <p><strong>{{ comment.username }}</strong> - {{ comment.timestamp | date:'short' }}</p>
+                <p>{{ comment.text }}</p>
+              </div>
+            </div>
+            <p *ngIf="!currentVideo.comments?.length && showComments" class="no-comments-message">No comments yet. Be the first!</p>
+          </div>
+        </div>
+
+        <!-- Share Button -->
+        <button class="share-btn" (click)="shareVideo()">Share</button>
+      </div>
+    </div>
+  </div>
+  <ng-template #loading>
+    <div class="loading-message">Loading video...</div>
+    <div *ngIf="videos.length === 0" class="error-message">Failed to load videos. Please try again.</div>
+  </ng-template>
+
+  <!-- Navigation Arrows (Desktop) -->
+  <div class="nav-arrows">
+    <button class="nav-prev" (click)="navigateToPreviousVideo()" *ngIf="hasPreviousVideo()" aria-label="Previous Video">◄</button>
+    <button class="nav-next" (click)="navigateToNextVideo()" *ngIf="hasNextVideo()" aria-label="Next Video">►</button>
+  </div>
+</div>

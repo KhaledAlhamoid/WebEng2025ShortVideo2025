@@ -1,1 +1,24 @@
-<p>upload works!</p>
+<div class="upload">
+  <h2>Video Uploaf</h2>
+  <p class="description">Choose a short video (max. 1 Minute) from your device.</p>
+
+  <div class="upload-box" (click)="fileInput.click()">
+    <p class="upload-text">Drag your video here or<span>Browse files</span></p>
+    
+    <input
+      type="file"
+      #fileInput  
+      accept="video/*"
+      style="display: none;"
+      (change)="onFileSelected($event)"
+    >
+  </div>
+<button class="upload-btn"
+          [disabled]="!selectedFile || isUploading"
+          (click)="startUpload()"
+          aria-label="Upload selected video">
+    {{ isUploading ? 'Uploading...' : 'Upload Video' }}
+  </button>
+
+  <p class="terms">By uploading you agree to our Terms of Use.</p>
+</div>
